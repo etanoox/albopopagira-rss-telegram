@@ -47,14 +47,23 @@ def send_telegram_message(text):
 def build_message(entry):
     title = html.escape(entry.get("title", "Nuovo aggiornamento"))
     link = entry.get("link", "")
+
     published = entry.get("published", "")
+    published_parsed = entry.get("published_parsed")
+
+    if published_parsed:
+        giorno = published_parsed.tm_mday
+        mese = published_parsed.tm_mon
+        anno = published_parsed.tm_year
+        formatted_date = f"{giorno:02d}/{mese:02d}/{anno}"
+    else:
+        formatted_date = published
 
     message = f"""📌 <b>Nuovo aggiornamento dall'Albo Pretorio di Agira</b>
 
-<b>{title}</b>"""
+🗓 <b>Data pubblicazione:</b> {html.escape(formatted_date)}
 
-    if published:
-        message += f"\n\n🗓 {html.escape(published)}"
+<b>{title}</b>"""
 
     if link:
         message += f"\n\n🔗 <a href=\"{html.escape(link)}\">Leggi il documento</a>"
