@@ -44,20 +44,40 @@ def send_telegram_message(text):
     response.raise_for_status()
 
 
+def get_entry_date(entry):
+    date_fields = [
+        "published_parsed",
+        "updated_parsed",
+        "created_parsed",
+    ]
+
+    for field in date_fields:
+        parsed_date = entry.get(field)
+        if parsed_date:
+            giorno = parsed_date.tm_mday
+            mese = parsed_date.tm_mon
+            anno = parsed_date.tm_year
+            return f"{giorno:02d}/{mese:02d}/{anno}"
+
+    text_date_fields = [
+        "published",
+        "updated",
+        "created",
+        "date",
+    ]
+
+    for field in text_date_fields:
+        value = entry.get(field)
+        if value:
+            return value
+
+    return "Data non disponibile"
+
+
 def build_message(entry):
     title = html.escape(entry.get("title", "Nuovo aggiornamento"))
     link = entry.get("link", "")
-
-    published = entry.get("published", "")
-    published_parsed = entry.get("published_parsed")
-
-    if published_parsed:
-        giorno = published_parsed.tm_mday
-        mese = published_parsed.tm_mon
-        anno = published_parsed.tm_year
-        formatted_date = f"{giorno:02d}/{mese:02d}/{anno}"
-    else:
-        formatted_date = published
+    formatted_date = get_entry_date(entry)
 
     message = f"""📌 <b>Nuovo aggiornamento dall'Albo Pretorio di Agira</b>
 
