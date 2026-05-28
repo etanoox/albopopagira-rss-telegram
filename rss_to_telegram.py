@@ -4,6 +4,8 @@ import html
 import feedparser
 import requests
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 FEED_URL = "https://feeds.feedburner.com/albopopagira"
 STATE_FILE = Path("posted_items.json")
@@ -77,11 +79,13 @@ def get_entry_date(entry):
 def build_message(entry):
     title = html.escape(entry.get("title", "Nuovo aggiornamento"))
     link = entry.get("link", "")
-    formatted_date = get_entry_date(entry)
+
+    now_italy = datetime.now(ZoneInfo("Europe/Rome"))
+    formatted_date = now_italy.strftime("%d/%m/%Y")
 
     message = f"""📌 <b>Nuovo aggiornamento dall'Albo Pretorio di Agira</b>
 
-🗓 <b>Data pubblicazione:</b> {html.escape(formatted_date)}
+🗓 <b>Data pubblicazione:</b> {formatted_date}
 
 <b>{title}</b>"""
 
