@@ -11,7 +11,7 @@ STATE_FILE = Path("posted_items.json")
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
-MAX_ITEMS_PER_RUN = 5
+MAX_ITEMS_PER_RUN = 15
 
 
 def load_posted_items():
